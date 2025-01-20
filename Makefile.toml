@@ -1,44 +1,24 @@
-[tasks.install-debug]
-dependencies = ["websockify", "rdp-debug", "vnc-debug", "ssh-debug"]
-
+ 
 [tasks.install-release]
-dependencies = ["websockify", "rdp-release", "vnc-release", "ssh-release"]
+dependencies = ["websockify","vnc-release"]
 
-[tasks.rdp-debug]
-dependencies = ["install-dir"]
-script = '''
-cd ${RDP} && cargo make install-debug && cd ..
-'''
+ 
+[env]
+INSTALL_PATH= "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/build"
+WEBSOCKIFY="axum-websockify"
+VNC="webvnc"
+RDP="webrdp"
+SSH="webssh"
 
-[tasks.vnc-debug]
-dependencies = ["install-dir"]
-script = '''
-cd ${VNC} && cargo make install-debug && cd ..
-'''
-
-[tasks.ssh-debug]
-dependencies = ["install-dir"]
-script = '''
-cd ${SSH} && cargo make install-debug && cd ..
-'''
-
-[tasks.rdp-release]
-dependencies = ["install-dir"]
-script = '''
-cd ${RDP} && cargo make install-release && cd ..
-'''
-
+ 
+ 
 [tasks.vnc-release]
 dependencies = ["install-dir"]
 script = '''
-cd ${VNC} && cargo make install-release && cd ..
+cd webvnc && cargo make install-release && cd ..
 '''
 
-[tasks.ssh-release]
-dependencies = ["install-dir"]
-script = '''
-cd ${SSH} && cargo make install-release && cd ..
-'''
+ 
 
 [tasks.websockify]
 dependencies = ["install-dir"]
@@ -51,32 +31,6 @@ script = '''
 mkdir -p ${INSTALL_PATH}
 cp assets/* ${INSTALL_PATH}
 '''
-
-[tasks.clean-rdp]
-script = '''
-cd ${RDP} && cargo clean && cd ..
-'''
-
-[tasks.clean-vnc]
-script = '''
-cd ${VNC} && cargo clean && cd ..
-'''
-
-[tasks.clean-ssh]
-script = '''
-cd ${SSH} && cargo clean && cd ..
-'''
-
-[tasks.clean-all]
-dependencies = ["clean-ssh", "clean-vnc", "clean-rdp"]
-script = '''
-rm -rf ${INSTALL_PATH}
-cd ${WEBSOCKIFY} && cargo clean && cd ..
-'''
-
-[env]
-INSTALL_PATH= "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}/build"
-WEBSOCKIFY="axum-websockify"
-VNC="webvnc"
-RDP="webrdp"
-SSH="webssh"
+ 
+ 
+ 
